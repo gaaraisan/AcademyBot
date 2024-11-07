@@ -1,5 +1,17 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputFile
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from dotenv import load_dotenv
+import os
+
+# Завантажуємо змінні з .env
+load_dotenv()
+
+# Отримуємо токен з змінних середовища
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+
+# Перевірка, чи успішно завантажився токен
+if TELEGRAM_TOKEN is None:
+    raise ValueError("TELEGRAM_TOKEN не знайдено! Переконайтеся, що він вказаний в .env файлі.")
 
 # Функція для відправки вітального повідомлення з текстом
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -72,7 +84,7 @@ async def final(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 # Основна функція для запуску бота
 def main() -> None:
-    application = Application.builder().token("7677813608:AAF6Qj9CidkqWNhkJeKAEOJK4cOfn5FS2ro").build()
+    application = Application.builder().token(TELEGRAM_TOKEN).build()
 
     # Додаємо обробник для команди /start
     application.add_handler(CommandHandler("start", start))
@@ -84,6 +96,6 @@ def main() -> None:
 
     # Запускаємо бота
     application.run_polling()
-
+# Перевірка, чи запускається скрипт безпосередньо
 if __name__ == "__main__":
     main()
